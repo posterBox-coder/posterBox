@@ -1,55 +1,60 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-import '@/global.css';
-
 import { Platform } from 'react-native';
 
 export const Colors = {
   light: {
     text: '#000000',
-    background: '#ffffff',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
+    text2: '#2A2A2A',
+    background: '#FFFFFF',
+    primary: '#AA0000',
+    borderColor: '#0000003D',
+    // icon: '#687076',
+    // button: '#E9F1FF',
+    // inputBackground: '#CBCDCD33',
+    // card: '#EFFAF6',
+    // card2: '#DEEBED',
+    // tabBorderColor: '#E2E8F0',
+    // skeletonLoader1: '#D1D5DB',
+    // skeletonLoader2: '#E9F1FF',
   },
   dark: {
-    text: '#ffffff',
+    text: '#FFFFFF',
+    text2: '#C6C8C8',
     background: '#000000',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
+    primary: '#AA0000',
+    borderColor: '#0000003D',
+    // icon: '#687076',
+    // button: '#E9F1FF',
+    // inputBackground: '#CBCDCD33',
+    // card: '#EFFAF6',
+    // card2: '#DEEBED',
+    // tabBorderColor: '#E2E8F0',
+    // skeletonLoader1: '#D1D5DB',
+    // skeletonLoader2: '#E9F1FF',
   },
+} as const;
+
+export const Palette = {
+  error: '#991313',
+  success: '#24FD11',
+  white: '#FFFFFF',
+  amber: '#A58404',
+  transparentBlack: 'rgba(0, 0, 0, 0.8)',
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: 'var(--font-display)',
-    serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
-    mono: 'var(--font-mono)',
-  },
-});
+export const Fonts = {
+  thin: 'Inter-Thin',
+  extraLight: 'Inter-ExtraLight',
+  light: 'Inter-Light',
+  regular: 'Inter-Regular',
+  medium: 'Inter-Medium',
+  semiBold: 'Inter-SemiBold',
+  bold: 'Inter-Bold',
+  extraBold: 'Inter-ExtraBold',
+  black: 'Inter-Black',
+  italic: 'Inter-Italic',
+} as const;
 
 export const Spacing = {
   half: 2,
