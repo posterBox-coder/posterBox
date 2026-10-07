@@ -43,7 +43,6 @@ export default function Typography({
   ...rest
 }: TypographyProps) {
   const theme = useTheme();
-
   return (
     <Text
       {...rest}
@@ -53,7 +52,7 @@ export default function Typography({
           fontFamily: font ?? FONT_BY_WEIGHT[weight],
           fontSize: size,
           textAlign: align,
-          lineHeight: lineHeight ?? size,
+          lineHeight: lineHeight ?? size * 1.2,
         },
         style,
       ]}>

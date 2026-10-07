@@ -1,8 +1,8 @@
 import { ActivityIndicator, Pressable, StyleSheet, type ViewStyle } from 'react-native';
 
+import Typography from '@/components/ui/Typography';
 import { Palette } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import Typography from '@/components/ui/Typography';
 
 type ButtonVariant = 'primary' | 'secondary';
 
@@ -43,7 +43,7 @@ export default function AppButton({
       {isLoading ? (
         <ActivityIndicator color={textColor} />
       ) : (
-        <Typography weight="600" size={16} lineHeight={16} color={textColor} align="center">
+        <Typography weight="600" size={16} color={textColor} align="center">
           {title}
         </Typography>
       )}
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   base: {
     width: '100%',
     height: 48,
-    borderRadius: 4,
+    borderRadius: 5,
     padding: 8,
     gap: 8,
     flexDirection: 'row',
