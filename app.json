@@ -24,6 +24,14 @@
     "plugins": [
       "expo-router",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow PosterBox to access your photos for KYC verification.",
+          "cameraPermission": "Allow PosterBox to use your camera for KYC verification.",
+          "microphonePermission": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#AA0000",

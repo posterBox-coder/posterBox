@@ -62,7 +62,7 @@ export default function VerifyOtp() {
         return;
       }
 
-      router.replace('/(auth)/login');
+      router.replace('/(auth)/kyc');
     } catch (verifyError) {
       setError(verifyError instanceof Error ? verifyError.message : 'Verification failed');
       otpRef.current?.clear();
