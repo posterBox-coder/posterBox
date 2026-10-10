@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 import AuthHeader from '@/components/shared/auth/AuthHeader';
 import AuthScreen from '@/components/shared/auth/AuthScreen';
@@ -8,6 +8,7 @@ import KycActionCard from '@/components/shared/kyc/KycActionCard';
 import AppButton from '@/components/ui/AppButton';
 import TopHeader from '@/components/ui/TopHeader';
 import Typography from '@/components/ui/Typography';
+import { Icons } from '@/constants/icons';
 import { Palette } from '@/constants/theme';
 import { useKyc } from '@/providers/kyc-provider';
 
@@ -58,18 +59,21 @@ export default function KycVerification() {
 
       <View style={styles.cards}>
         <KycActionCard
-          icon="image-2-line"
+          image={Icons.image2Line as ImageSourcePropType}
+         
           title="Upload Your Valid ID"
           subtitle="to check your personal informations are correct"
           completed={isIdComplete}
           onPress={() => router.push('/(auth)/kyc/upload-id')}
+          imgStyle={{ width: 26, height: 20, marginTop: 5 }}
         />
         <KycActionCard
-          icon="camera-line"
+          image={Icons.cameraLine as ImageSourcePropType}
           title="Take A Picture Of Yourself"
           subtitle="to match you to your passport or ID photo"
           completed={isSelfieComplete}
           onPress={() => router.push('/(auth)/kyc/selfie')}
+          imgStyle={{ width: 32, height: 32 }}
         />
       </View>
       {error ? (

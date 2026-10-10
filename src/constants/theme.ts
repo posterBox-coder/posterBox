@@ -39,11 +39,11 @@ export const Palette = {
   white: '#FFFFFF',
   amber: '#A58404',
   transparentBlack: 'rgba(0, 0, 0, 0.8)',
-  kycCard: '#F8F0E8',
+  kycCard: '#F9F0F0',
   kycNote: '#F6E89A',
-  kycPending: '#F5A623',
-  avatarMuted: '#D0D0D0',
-  avatarBg: '#F2F2F2',
+  kycPending: '#FFA500',
+  avatarMuted: '#D9D9D93D',
+  avatarBg: '#D9D9D93D',
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;

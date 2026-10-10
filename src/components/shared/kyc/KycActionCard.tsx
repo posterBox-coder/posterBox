@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, ImageStyle, Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import Icon from 'react-native-remix-icon';
 
 import Typography from '@/components/ui/Typography';
@@ -6,19 +6,21 @@ import { Palette } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 type KycActionCardProps = {
-  icon: 'image-2-line' | 'camera-line';
+  image: ImageSourcePropType;
   title: string;
   subtitle: string;
   completed?: boolean;
   onPress: () => void;
+  imgStyle?: StyleProp<ViewStyle>;
 };
 
 export default function KycActionCard({
-  icon,
+  image,
   title,
   subtitle,
   completed,
   onPress,
+  imgStyle,
 }: KycActionCardProps) {
   const theme = useTheme();
 
@@ -30,7 +32,7 @@ export default function KycActionCard({
         { borderColor: theme.borderColor, opacity: pressed ? 0.85 : 1 },
       ]}>
       <View style={styles.row}>
-        <Icon name={icon} size={22} color={theme.text} />
+        <Image source={image} style={imgStyle as StyleProp<ImageStyle>} />
         <View style={styles.copy}>
           <Typography size={16} weight="700" lineHeight={22}>
             {title}
@@ -52,6 +54,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 16,
     paddingVertical: 18,
+    height: 105,
+    justifyContent: 'center',
   },
   row: {
     alignItems: 'flex-start',

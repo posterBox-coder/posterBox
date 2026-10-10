@@ -17,7 +17,7 @@ export default function AuthHeader({ title, subtitle, actionLabel, onActionPress
   return (
     <View style={[styles.header, !title && styles.headerCompact, style]}>
       {title ? (
-        <Typography size={24} weight="700" align="center" lineHeight={30}>
+        <Typography size={20} weight="700" align="center" lineHeight={30}>
           {title}
         </Typography>
       ) : null}

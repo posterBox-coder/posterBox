@@ -1,13 +1,13 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import Icon from 'react-native-remix-icon';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 import AuthHeader from '@/components/shared/auth/AuthHeader';
 import AuthScreen from '@/components/shared/auth/AuthScreen';
 import AppButton from '@/components/ui/AppButton';
 import TopHeader from '@/components/ui/TopHeader';
 import Typography from '@/components/ui/Typography';
+import { Icons } from '@/constants/icons';
 import { Palette } from '@/constants/theme';
 import { capturePhoto } from '@/helpers/media';
 import { useKyc } from '@/providers/kyc-provider';
@@ -69,15 +69,15 @@ export default function UploadSelfie() {
       <View style={styles.content}>
         <View style={styles.avatar}>
           {previewUri ? (
-            <Image source={{ uri: previewUri }} style={styles.avatarImage} />
+            <Image source={{ uri: previewUri }} style={{ height: 200, width: 200 }} />
           ) : (
-            <Icon name="user-3-fill" size={72} color={Palette.avatarMuted} />
+            <Image source={Icons.user60 as ImageSourcePropType} style={styles.avatarImage} />
           )}
         </View>
 
         <AppButton
           title="Capture Selfie"
-          variant="secondary"
+          variant="tertiary"
           handlePress={handleCapture}
           isLoading={isCapturing}
           disabled={isCapturing}
@@ -107,15 +107,15 @@ const styles = StyleSheet.create({
   avatar: {
     alignItems: 'center',
     backgroundColor: Palette.avatarBg,
-    borderRadius: 110,
-    height: 220,
+    borderRadius: 100,
+    height: 200,
     justifyContent: 'center',
     overflow: 'hidden',
-    width: 220,
+    width: 200,
   },
   avatarImage: {
-    height: '100%',
-    width: '100%',
+    height: 60,
+    width: 60,
   },
   capture: {
     width: '70%',

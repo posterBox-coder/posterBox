@@ -33,7 +33,7 @@ const TopHeader = ({
 	return (
 		<View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between",  }}>
 			<Icon name="arrow-left-s-line" size={32} color={Colors[theme.mode].text} onPress={handleRoute} style={{ paddingRight: 20 }} />
-			<Typography size={18} weight="600" textType="text" style={{ flex: 1, textAlign: "center" }}>
+			<Typography size={14} weight="700" textType="text" style={{ flex: 1, textAlign: "left" }}>
 				{title}
 			</Typography>
 

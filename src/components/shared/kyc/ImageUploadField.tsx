@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { type Control, type FieldValues, type Path, useController } from 'react-hook-form';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import Typography from '@/components/ui/Typography';
 import { Palette } from '@/constants/theme';
@@ -61,7 +61,7 @@ export default function ImageUploadField<T extends FieldValues>({
           <Image source={{ uri: value }} style={styles.preview} resizeMode="cover" />
         ) : (
           <View style={styles.plus}>
-            <Typography size={28} weight="400" color={Palette.white} lineHeight={32}>
+            <Typography size={28} weight="400" color={theme.text} lineHeight={32}>
               +
             </Typography>
           </View>

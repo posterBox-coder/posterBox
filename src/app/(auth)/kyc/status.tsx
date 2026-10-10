@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useTheme } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-remix-icon';
 
@@ -12,8 +12,9 @@ import { useKyc } from '@/providers/kyc-provider';
 
 export default function KycStatus() {
   const { idDetails, status, submittedAt } = useKyc();
-  const isVerified = status === 'verified';
+  const isVerified = true; //= status === 'verified';
   const dateLabel = submittedAt ?? '—';
+  const theme = useTheme();
 
   return (
     <AuthScreen
@@ -31,7 +32,7 @@ export default function KycStatus() {
             { backgroundColor: isVerified ? Palette.success : Palette.kycPending },
           ]}>
           {isVerified ? (
-            <Icon name="check-line" size={40} color="#111" />
+            <Icon name="check-fill" size={40} color="#000" />
           ) : (
             <View style={styles.dots}>
               <View style={styles.dot} />
@@ -82,7 +83,7 @@ export default function KycStatus() {
 const styles = StyleSheet.create({
   navTitle: {
     marginBottom: 24,
-    marginTop: 8,
+    marginTop: 20,
   },
   hero: {
     alignItems: 'center',
@@ -90,10 +91,12 @@ const styles = StyleSheet.create({
   },
   badge: {
     alignItems: 'center',
-    borderRadius: 56,
-    height: 112,
+    borderRadius: 48,
+    height: 87,
     justifyContent: 'center',
-    width: 112,
+    width: 87,
+    borderWidth: 2,
+    borderColor: '#000',
   },
   dots: {
     flexDirection: 'row',
