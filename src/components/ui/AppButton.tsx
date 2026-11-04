@@ -54,7 +54,7 @@ export default function AppButton({
 
 const styles = StyleSheet.create({
   base: {
-    width: '100%',
+    alignSelf: 'stretch',
     height: 48,
     borderRadius: 5,
     padding: 8,

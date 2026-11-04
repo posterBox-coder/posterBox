@@ -11,6 +11,7 @@ import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
 import { emailRules, mockRequest, passwordRules } from '@/helpers/auth';
 import { useTheme } from '@/hooks/use-theme';
+import { useSession } from '@/providers/session-provider';
 
 type LoginForm = {
   email: string;
@@ -20,6 +21,7 @@ type LoginForm = {
 
 export default function Login() {
   const theme = useTheme();
+  const { signIn } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { control, handleSubmit, setError } = useForm<LoginForm>({
     defaultValues: {
@@ -29,10 +31,12 @@ export default function Login() {
     },
   });
 
-  const onSubmit = handleSubmit(async () => {
+  const onSubmit = handleSubmit(async ({ email, rememberMe }) => {
     try {
       setIsSubmitting(true);
       await mockRequest();
+      await signIn({ email }, { persist: rememberMe });
+      router.replace('/(tabs)');
     } catch {
       setError('password', { message: 'Unable to log in. Please try again.' });
     } finally {

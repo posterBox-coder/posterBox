@@ -1,10 +1,14 @@
 import AnimatedSplash from '@/components/utilities/AnimatedSplash';
+import { QueryProvider } from '@/providers/query-provider';
+import { SessionProvider, useSession } from '@/providers/session-provider';
 import { AppThemeProvider, useAppTheme } from '@/providers/theme-provider';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import 'react-native-reanimated';
 
@@ -42,9 +46,15 @@ export default function RootLayout() {
   }
 
   return (
-    <AppThemeProvider>
-      <RootNavigator splashVisible={splashVisible} onSplashComplete={handleSplashComplete} />
-    </AppThemeProvider>
+    <GestureHandlerRootView style={styles.root}>
+      <AppThemeProvider>
+        <QueryProvider>
+          <SessionProvider>
+            <RootNavigator splashVisible={splashVisible} onSplashComplete={handleSplashComplete} />
+          </SessionProvider>
+        </QueryProvider>
+      </AppThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -56,19 +66,33 @@ function RootNavigator({
   onSplashComplete: () => void;
 }) {
   const { mode, isReady } = useAppTheme();
+  const { session, isLoading: isSessionLoading } = useSession();
+  const appReady = isReady && !isSessionLoading;
 
   return (
     <ThemeProvider value={mode === 'dark' ? DarkTheme : DefaultTheme}>
       <KeyboardProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
-          <Stack.Screen name="(auth)" />
+          <Stack.Protected guard={!session}>
+            <Stack.Screen name="(auth)" />
+          </Stack.Protected>
+          <Stack.Protected guard={!!session}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(home)" />
+          </Stack.Protected>
         </Stack>
       </KeyboardProvider>
       <StatusBar style={splashVisible || mode === 'dark' ? 'light' : 'dark'} />
       {splashVisible ? (
-        <AnimatedSplash isAppReady={isReady} onAnimationComplete={onSplashComplete} />
+        <AnimatedSplash isAppReady={appReady} onAnimationComplete={onSplashComplete} />
       ) : null}
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});

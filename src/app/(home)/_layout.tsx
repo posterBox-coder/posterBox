@@ -1,0 +1,24 @@
+import { Stack } from 'expo-router';
+
+export default function HomeStackLayout() {
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="notifications" />
+      <Stack.Screen name="track" />
+      <Stack.Screen name="track-details" />
+      <Stack.Screen name="send-package" />
+      <Stack.Screen name="find-traveler" />
+      <Stack.Screen name="request-details" />
+      <Stack.Screen name="payment-success" />
+      <Stack.Screen name="tracking-code" />
+      <Stack.Screen name="do-delivery" />
+      <Stack.Screen name="payout-account" />
+      <Stack.Screen name="delivery/[id]" />
+      <Stack.Screen name="ongoing-delivery" />
+      <Stack.Screen name="confirm-delivery" />
+      <Stack.Screen name="delivered" />
+      <Stack.Screen name="delivery-rate" />
+      <Stack.Screen name="contact-support" />
+    </Stack>
+  );
+}

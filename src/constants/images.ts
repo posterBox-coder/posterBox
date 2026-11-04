@@ -3,6 +3,9 @@ const logo_red = require('../../assets/images/logo_red.png');
 const onboarding_1 = require('../../assets/images/onboarding_1.png');
 const onboarding_2 = require('../../assets/images/onboarding_2.png');
 const onboarding_3 = require('../../assets/images/onboarding_3.png');
+const packageBox = require('../../assets/images/package-box.png');
+const deliveryRider = require('../../assets/images/delivery-rider.png');
+const packageCheck = require('../../assets/images/lucide_package-check.png');
 
 export default {
   logo_white,
@@ -10,4 +13,7 @@ export default {
   onboarding_1,
   onboarding_2,
   onboarding_3,
+  packageBox,
+  deliveryRider,
+  packageCheck,
 };
