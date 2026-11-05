@@ -1,4 +1,5 @@
 import AnimatedSplash from '@/components/utilities/AnimatedSplash';
+import { Colors } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { KycProvider } from '@/providers/kyc-provider';
 import { QueryProvider } from '@/providers/query-provider';
@@ -8,8 +9,8 @@ import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { useCallback, useState } from 'react';
+import { StatusBar as NativeStatusBar, Platform, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import 'react-native-reanimated';
@@ -33,12 +34,6 @@ export default function RootLayout() {
   });
   const [splashVisible, setSplashVisible] = useState(true);
 
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync().catch(() => {});
-    }
-  }, [loaded, error]);
-
   const handleSplashComplete = useCallback(() => {
     setSplashVisible(false);
   }, []);
@@ -48,7 +43,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={styles.root}>
+    <GestureHandlerRootView style={[styles.root, splashVisible && styles.splashRoot]}>
       <AppThemeProvider>
         <QueryProvider>
           <SessionProvider>
@@ -82,7 +77,15 @@ function RootNavigator({
   return (
     <ThemeProvider value={mode === 'dark' ? DarkTheme : DefaultTheme}>
       <KeyboardProvider>
-        <Stack screenOptions={{ headerShown: false }}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            statusBarTranslucent: splashVisible,
+            statusBarStyle: splashVisible || mode === 'dark' ? 'light' : 'dark',
+            statusBarBackgroundColor: splashVisible ? Colors.light.primary : 'transparent',
+            navigationBarColor: splashVisible ? Colors.light.primary : theme.background,
+            navigationBarTranslucent: splashVisible,
+          }}>
           <Stack.Screen name="index" />
           <Stack.Protected guard={!session}>
             <Stack.Screen name="(auth)" />
@@ -94,8 +97,15 @@ function RootNavigator({
         </Stack>
       </KeyboardProvider>
       <StatusBar style={splashVisible || mode === 'dark' ? 'light' : 'dark'} />
+      {splashVisible && Platform.OS === 'android' ? (
+        <NativeStatusBar translucent backgroundColor={Colors.light.primary} barStyle="light-content" />
+      ) : null}
       {splashVisible ? (
-        <AnimatedSplash isAppReady={appReady} onAnimationComplete={onSplashComplete} />
+        <AnimatedSplash
+          isAppReady={appReady}
+          restoreColor={theme.background}
+          onAnimationComplete={onSplashComplete}
+        />
       ) : null}
     </ThemeProvider>
   );
@@ -104,5 +114,8 @@ function RootNavigator({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  splashRoot: {
+    backgroundColor: Colors.light.primary,
   },
 });

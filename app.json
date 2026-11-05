@@ -7,10 +7,18 @@
     "icon": "./assets/images/logo.png",
     "scheme": "posterbox",
     "userInterfaceStyle": "automatic",
+    "backgroundColor": "#FFFFFF",
+    "androidStatusBar": {
+      "backgroundColor": "#FFFFFF",
+      "barStyle": "dark-content",
+      "translucent": true
+    },
     "ios": {
-      "icon": "./assets/images/logo.png"
+      "icon": "./assets/images/logo.png",
+      "backgroundColor": "#FFFFFF"
     },
     "android": {
+      "backgroundColor": "#FFFFFF",
       "adaptiveIcon": {
         "backgroundColor": "#AA0000",
         "foregroundImage": "./assets/images/logo.png"
