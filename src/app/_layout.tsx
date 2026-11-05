@@ -1,4 +1,5 @@
 import AnimatedSplash from '@/components/utilities/AnimatedSplash';
+import { useTheme } from '@/hooks/use-theme';
 import { KycProvider } from '@/providers/kyc-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { SessionProvider, useSession } from '@/providers/session-provider';
@@ -69,8 +70,14 @@ function RootNavigator({
   onSplashComplete: () => void;
 }) {
   const { mode, isReady } = useAppTheme();
+  const theme = useTheme();
   const { session, isLoading: isSessionLoading } = useSession();
   const appReady = isReady && !isSessionLoading;
+  const headerStatusBar = {
+    statusBarTranslucent: true,
+    statusBarStyle: 'light' as const,
+    statusBarBackgroundColor: theme.primary,
+  };
 
   return (
     <ThemeProvider value={mode === 'dark' ? DarkTheme : DefaultTheme}>
@@ -81,8 +88,8 @@ function RootNavigator({
             <Stack.Screen name="(auth)" />
           </Stack.Protected>
           <Stack.Protected guard={!!session}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="(home)" />
+            <Stack.Screen name="(tabs)" options={headerStatusBar} />
+            <Stack.Screen name="(home)" options={headerStatusBar} />
           </Stack.Protected>
         </Stack>
       </KeyboardProvider>

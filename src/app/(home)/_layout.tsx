@@ -1,8 +1,18 @@
 import { Stack } from 'expo-router';
 
+import { useTheme } from '@/hooks/use-theme';
+
 export default function HomeStackLayout() {
+  const theme = useTheme();
+
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        statusBarTranslucent: true,
+        statusBarStyle: 'light',
+        statusBarBackgroundColor: theme.primary,
+      }}>
       <Stack.Screen name="notifications" />
       <Stack.Screen name="track" />
       <Stack.Screen name="track-details" />
