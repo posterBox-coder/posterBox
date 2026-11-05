@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.primary,
     justifyContent: 'center',
     zIndex: 100,
+    flex: 1,
   },
   logo: {
     height: LOGO_HEIGHT,

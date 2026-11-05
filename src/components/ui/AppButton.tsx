@@ -4,7 +4,7 @@ import Typography from '@/components/ui/Typography';
 import { Palette } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary';
 
 type AppButtonProps = {
   title: string;
@@ -25,8 +25,9 @@ export default function AppButton({
 }: AppButtonProps) {
   const theme = useTheme();
   const isPrimary = variant === 'primary';
+  const isTertiary = variant === 'tertiary';
   const isInactive = disabled || isLoading;
-  const textColor = isPrimary ? Palette.white : theme.primary;
+  const textColor = isPrimary ? Palette.white : isTertiary ? theme.text2 : theme.primary;
 
   return (
     <Pressable
@@ -53,7 +54,7 @@ export default function AppButton({
 
 const styles = StyleSheet.create({
   base: {
-    width: '100%',
+    alignSelf: 'stretch',
     height: 48,
     borderRadius: 5,
     padding: 8,
