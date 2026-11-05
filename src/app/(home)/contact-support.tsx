@@ -36,14 +36,6 @@ export default function ContactSupportScreen() {
             {SUPPORT.email}
           </Typography>
         </Pressable>
-        <View style={[styles.line, { backgroundColor: theme.divider }]} />
-        <Pressable style={styles.row} onPress={() => open(SUPPORT.whatsappUrl)}>
-          <Icon name="whatsapp-line" size={18} color={Palette.phoneGreen} />
-          <Typography size={15} style={styles.grow}>
-            WhatsApp
-          </Typography>
-          <Icon name="arrow-right-s-line" size={20} color={theme.text2} />
-        </Pressable>
         {SUPPORT_LINKS.map((item) => (
           <View key={item.id}>
             <View style={[styles.line, { backgroundColor: theme.divider }]} />

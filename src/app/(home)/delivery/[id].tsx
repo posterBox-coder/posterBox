@@ -16,7 +16,6 @@ import Typography from '@/components/ui/Typography';
 import { canSenderCancel, canTravelerRespond, isActiveForTraveler, isInTransit, PAYMENT_STATUS_LABEL } from '@/constants/delivery';
 import { useRouteParam } from '@/hooks/use-route-param';
 import { useTheme } from '@/hooks/use-theme';
-import { formatNaira } from '@/utils/format';
 import { push } from '@/utils/nav';
 
 export default function DeliveryDetailsScreen() {
@@ -77,12 +76,14 @@ export default function DeliveryDetailsScreen() {
         {delivery ? (
           <>
             <StatusChip status={delivery.status} />
-            <Typography size={12} textType="text2">
+           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+           <Typography size={12} textType="text2">
               Tracking No
             </Typography>
-            <Typography size={20} weight="700">
+            <Typography size={16} weight="700">
               {delivery.trackingId}
             </Typography>
+           </View>
             {isSender && delivery.deliveryCode ? (
               <Typography size={13} textType="text2">
                 Delivery code: {delivery.deliveryCode}
@@ -106,9 +107,7 @@ export default function DeliveryDetailsScreen() {
               Delivery Timeline
             </Typography>
             <DeliveryTimeline events={delivery.timeline} />
-            <Typography size={13} textType="text2">
-              Fee: {formatNaira(delivery.fee)}
-            </Typography>
+           
           </>
         ) : null}
       </QueryStatus>

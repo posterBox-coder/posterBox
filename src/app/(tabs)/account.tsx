@@ -1,27 +1,28 @@
 import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import Icon, { type IconName } from 'react-native-remix-icon';
+import Icon from 'react-native-remix-icon';
 
+import { useMe } from '@/api/hooks/use-account';
 import ScreenHeader from '@/components/shared/ScreenHeader';
 import { ThemedView } from '@/components/themed-view';
-import AppButton from '@/components/ui/AppButton';
 import Typography from '@/components/ui/Typography';
-import { Palette } from '@/constants/theme';
-import { useSession } from '@/providers/session-provider';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTheme } from '@/hooks/use-theme';
+import { useKyc } from '@/providers/kyc-provider';
+import { useSession } from '@/providers/session-provider';
 import { push } from '@/utils/nav';
 
-const MENU: { icon: IconName; title: string; subtitle: string; href?: '/(home)/notifications' | '/(home)/contact-support' | '/(home)/payout-account' }[] = [
-  { icon: 'user-3-line', title: 'Profile', subtitle: 'View and update your details' },
-  { icon: 'bank-card-line', title: 'Payout', subtitle: 'Bank account for delivery earnings', href: '/(home)/payout-account' },
-  { icon: 'notification-3-line', title: 'Notifications', subtitle: 'Manage delivery alerts', href: '/(home)/notifications' },
-  { icon: 'shield-user-line', title: 'Security', subtitle: 'Password and account safety' },
-  { icon: 'customer-service-2-line', title: 'Help', subtitle: 'Get support from PosterBox', href: '/(home)/contact-support' },
-];
+const BLUE = '#3C37F2';
 
 export default function AccountScreen() {
   const theme = useTheme();
+  const scheme = useColorScheme();
   const { session, signOut } = useSession();
+  const { data: me } = useMe();
+  const { status } = useKyc();
+  const name = session?.name || me?.fullName || 'PosterBox user';
+  const verified = status === 'verified' || (me?.isVerifiedTraveler ?? false);
+  const borderColor = scheme === 'dark' ? theme.divider : '#E6E6E6';
 
   const handleSignOut = async () => {
     await signOut();
@@ -32,51 +33,74 @@ export default function AccountScreen() {
     <ThemedView style={styles.screen}>
       <ScreenHeader title="Account" showBack={false} />
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
-        <View style={[styles.profile, { backgroundColor: theme.homeCard }]}>
-          <View style={[styles.avatar, { backgroundColor: theme.primary }]}>
-            <Typography size={20} weight="700" color={Palette.white}>
-              {(session?.name ?? 'P').charAt(0).toUpperCase()}
+        <View style={styles.profile}>
+          <View style={styles.avatar}>
+            <Typography size={36} weight="600" color="#FFFFFF">
+              {name.charAt(0).toUpperCase()}
             </Typography>
           </View>
-          <View style={styles.profileCopy}>
-            <Typography size={18} weight="700">
-              {session?.name ?? 'PosterBox user'}
-            </Typography>
-            <Typography size={13} textType="text2">
-              {session?.email ?? ''}
-            </Typography>
-          </View>
+          <Typography size={18} weight="700" align="center">
+            {name}
+          </Typography>
         </View>
 
-        <View style={styles.menu}>
-          {MENU.map((item) => (
-            <Pressable
-              key={item.title}
-              style={[styles.menuItem, { borderColor: theme.borderColor }]}
-              onPress={() => {
-                if (item.href) {
-                  push(item.href);
-                }
-              }}>
-              <Icon name={item.icon} size={22} color={theme.primary} />
-              <View style={styles.menuCopy}>
-                <Typography size={15} weight="600">
-                  {item.title}
-                </Typography>
-                <Typography size={12} textType="text2">
-                  {item.subtitle}
-                </Typography>
-              </View>
-              <Icon name="arrow-right-s-line" size={20} color={theme.muted} />
-            </Pressable>
-          ))}
+        <View style={[styles.card, styles.row, { backgroundColor: theme.surface, borderColor }]}>
+          <Typography size={15} weight="500">
+            Status
+          </Typography>
+          {verified ? (
+            <View style={styles.status}>
+              <Icon name="checkbox-circle-fill" size={18} color={BLUE} />
+              <Typography size={14} weight="500">
+                Verified
+              </Typography>
+            </View>
+          ) : (
+            <Typography size={14} weight="500" textType="text3">
+              Unverified
+            </Typography>
+          )}
         </View>
 
-        <View style={styles.footer}>
-          <AppButton title="Sign out" variant="secondary" handlePress={handleSignOut} />
+        <Pressable
+          onPress={() => push('/(home)/enter-delivery-code')}
+          style={[styles.card, styles.row, styles.gap, { backgroundColor: theme.surface, borderColor }]}
+          accessibilityRole="button">
+          <Typography size={15} weight="500" style={styles.grow}>
+            Enter Delivery Code
+          </Typography>
+          <Icon name="arrow-right-s-line" size={22} color={theme.text2} />
+        </Pressable>
+
+        <View style={[styles.card, styles.gap, { backgroundColor: theme.surface, borderColor }]}>
+          <MenuLink title="Edit Account" onPress={() => push('/(home)/edit-profile')} borderColor={borderColor} />
+          <MenuLink title="Card Settings" onPress={() => push('/(home)/card-settings')} borderColor={borderColor} />
+          <MenuLink title="Update KYC" onPress={() => push('/(home)/update-kyc')} borderColor={borderColor} />
+          <MenuLink title="Contact Support" onPress={() => push('/(home)/contact-support')} borderColor={borderColor} />
+          <Pressable onPress={handleSignOut} style={styles.row} accessibilityRole="button" accessibilityLabel="log out">
+            <Typography size={15} weight="500">
+              Log out
+            </Typography>
+          </Pressable>
         </View>
       </ScrollView>
     </ThemedView>
+  );
+}
+
+function MenuLink({ title, onPress, borderColor }: { title: string; onPress: () => void; borderColor: string }) {
+  const theme = useTheme();
+
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[styles.row, styles.divider, { borderBottomColor: borderColor }]}
+      accessibilityRole="button">
+      <Typography size={15} weight="500" style={styles.grow}>
+        {title}
+      </Typography>
+      <Icon name="arrow-right-s-line" size={22} color={theme.text2} />
+    </Pressable>
   );
 }
 
@@ -85,44 +109,47 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   body: {
-    flexGrow: 1,
+    paddingBottom: 24,
     paddingHorizontal: 16,
-    paddingTop: 20,
   },
   profile: {
     alignItems: 'center',
-    borderRadius: 16,
-    flexDirection: 'row',
-    gap: 12,
-    padding: 16,
+    gap: 14,
+    paddingBottom: 22,
+    paddingTop: 28,
   },
   avatar: {
     alignItems: 'center',
-    borderRadius: 28,
-    height: 56,
+    backgroundColor: BLUE,
+    borderRadius: 46,
+    height: 92,
     justifyContent: 'center',
-    width: 56,
+    width: 92,
   },
-  profileCopy: {
-    flex: 1,
-    gap: 2,
+  card: {
+    borderRadius: 12,
+    borderWidth: 1,
+    overflow: 'hidden',
   },
-  menu: {
-    marginTop: 16,
+  gap: {
+    marginTop: 12,
   },
-  menuItem: {
+  row: {
     alignItems: 'center',
-    borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
-    gap: 12,
-    paddingVertical: 16,
+    justifyContent: 'space-between',
+    minHeight: 54,
+    paddingHorizontal: 16,
   },
-  menuCopy: {
+  divider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  grow: {
     flex: 1,
-    gap: 2,
   },
-  footer: {
-    marginTop: 'auto',
-    paddingBottom: 16,
+  status: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
   },
 });

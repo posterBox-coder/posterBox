@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { type Control, type FieldValues, type Path, useController } from 'react-hook-form';
 import { StyleSheet, TextInput, type TextInputProps, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-remix-icon';
@@ -15,6 +15,7 @@ type InputProps<T extends FieldValues> = {
   isPassword?: boolean;
   label?: string;
   right?: ReactNode;
+  transform?: (text: string) => string;
 } & Omit<TextInputProps, 'value' | 'onChangeText' | 'secureTextEntry'>;
 
 export default function Input<T extends FieldValues>({
@@ -25,6 +26,7 @@ export default function Input<T extends FieldValues>({
   isPassword = false,
   label,
   right,
+  transform,
   style,
   keyboardType,
   autoComplete,
@@ -55,7 +57,7 @@ export default function Input<T extends FieldValues>({
         placeholder={placeholder}
         placeholderTextColor={theme.text2}
         value={value}
-        onChangeText={onChange}
+        onChangeText={(text) => onChange(transform ? transform(text) : text)}
         onBlur={() => {
           onBlur();
           setIsFocused(false);

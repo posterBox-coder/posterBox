@@ -1,4 +1,5 @@
 import AnimatedSplash from '@/components/utilities/AnimatedSplash';
+import { KycProvider } from '@/providers/kyc-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { SessionProvider, useSession } from '@/providers/session-provider';
 import { AppThemeProvider, useAppTheme } from '@/providers/theme-provider';
@@ -50,7 +51,9 @@ export default function RootLayout() {
       <AppThemeProvider>
         <QueryProvider>
           <SessionProvider>
-            <RootNavigator splashVisible={splashVisible} onSplashComplete={handleSplashComplete} />
+            <KycProvider>
+              <RootNavigator splashVisible={splashVisible} onSplashComplete={handleSplashComplete} />
+            </KycProvider>
           </SessionProvider>
         </QueryProvider>
       </AppThemeProvider>

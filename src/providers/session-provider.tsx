@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type PropsWithChildren,
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    type PropsWithChildren,
 } from 'react';
 
 const SESSION_STORAGE_KEY = '@posterbox/session';
@@ -14,6 +14,7 @@ const SESSION_STORAGE_KEY = '@posterbox/session';
 export type SessionUser = {
   email: string;
   name: string;
+  phone?: string;
 };
 
 type SignInOptions = {
@@ -24,6 +25,7 @@ type SessionContextValue = {
   session: SessionUser | null;
   isLoading: boolean;
   signIn: (user: { email: string; name?: string }, options?: SignInOptions) => Promise<void>;
+  updateProfile: (patch: { name: string; phone: string }) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -83,6 +85,24 @@ export function SessionProvider({ children }: PropsWithChildren) {
     []
   );
 
+  const updateProfile = useCallback(async (patch: { name: string; phone: string }) => {
+    let next: SessionUser | null = null;
+    setSession((current) => {
+      if (!current) {
+        return current;
+      }
+      next = { ...current, name: patch.name.trim(), phone: patch.phone.trim() };
+      return next;
+    });
+    if (!next) {
+      return;
+    }
+    const raw = await AsyncStorage.getItem(SESSION_STORAGE_KEY);
+    if (raw) {
+      await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(next));
+    }
+  }, []);
+
   const signOut = useCallback(async () => {
     setSession(null);
     await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
@@ -93,9 +113,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
       session,
       isLoading,
       signIn,
+      updateProfile,
       signOut,
     }),
-    [session, isLoading, signIn, signOut]
+    [session, isLoading, signIn, updateProfile, signOut]
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

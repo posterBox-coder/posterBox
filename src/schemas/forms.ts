@@ -70,6 +70,29 @@ export const payoutFormSchema = z.object({
   accountNumber: z.string().trim().regex(/^\d{10}$/, 'Account number must be 10 digits'),
 });
 
+export const profileFormSchema = z
+  .object({
+    fullName: z.string().trim().min(2, 'Enter your full name'),
+    phone: z.string().trim().regex(NG_PHONE, 'Enter a valid phone number'),
+    oldPassword: z.string(),
+    newPassword: z.string(),
+  })
+  .refine((value) => !value.newPassword || value.oldPassword.length > 0, {
+    path: ['oldPassword'],
+    message: 'Enter your current password',
+  })
+  .refine((value) => (!value.oldPassword && !value.newPassword) || value.newPassword.length >= 8, {
+    path: ['newPassword'],
+    message: 'Password must be at least 8 characters',
+  });
+
+export const cardFormSchema = z.object({
+  holder: z.string().trim().min(2, 'Enter the name on the card'),
+  number: z.string().trim().refine((value) => value.replace(/\D/g, '').length === 16, 'Enter a 16-digit card number'),
+  expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{4}$/, 'Use MM/YYYY'),
+  cvv: z.string().regex(/^\d{3,4}$/, 'Enter the CVC'),
+});
+
 export const deliveryCodeFormSchema = z.object({
   code: z
     .string()

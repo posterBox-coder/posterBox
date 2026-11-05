@@ -10,10 +10,10 @@ import { ThemedView } from '@/components/themed-view';
 import SegmentedControl from '@/components/ui/SegmentedControl';
 import Typography from '@/components/ui/Typography';
 import { Palette } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 import type { Role } from '@/types';
 import { formatDate, formatLocation } from '@/utils/format';
 import { push } from '@/utils/nav';
-import { useTheme } from '@/hooks/use-theme';
 
 const ROLES: { value: Role; label: string }[] = [
   { value: 'SENDER', label: 'Sending' },
@@ -49,16 +49,30 @@ export default function ActivityScreen() {
             <Pressable
               onPress={() => push('/(home)/delivery/[id]', { id: item.id })}
               style={[styles.card, { backgroundColor: theme.background }]}>
-              <Typography size={15} weight="700">
+             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+             <Typography size={15} weight="700">
                 {item.trackingId}
               </Typography>
+              <StatusChip status={item.status} />
+             </View>
               <Typography size={13} textType="text2">
                 {formatLocation(item.sender.location)} → {formatLocation(item.receiver.location)}
               </Typography>
+             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+             {role === 'SENDER' ? (
+              <Typography size={12} textType="text3">
+                By {item.traveler?.fullName}
+              </Typography>
+             ) : (
+              <Typography size={12} textType="text3">
+                To {item.sender?.fullName}
+              </Typography>
+             )}
               <Typography size={12} textType="text3">
                 {formatDate(item.createdAt)}
               </Typography>
-              <StatusChip status={item.status} />
+             </View>
+             
             </Pressable>
           )}
         />
